@@ -1,0 +1,30 @@
+One possible design for a datastore to save monitoring data for a service with 100 APIs and 1000 users making roughly 1 million requests per day would be to use a relational database management system (RDBMS) such as MySQL or PostgreSQL.
+
+The database could have the following tables:
+
+apis: This table would store information about each of the 100 APIs, such as their names and URLs.
+users: This table would store information about each of the 1000 users, such as their names and IDs.
+requests: This table would store information about each request made to the service, such as the API called, the user who made the request, the response time, and whether the request resulted in an error.
+To store the monitoring data, the requests table would need to have the following fields:
+
+api_id: This would be a foreign key to the apis table, indicating which API was called for this request.
+user_id: This would be a foreign key to the users table, indicating which user made the request.
+response_time: This would be a numeric field to store the response time for the request in milliseconds.
+error: This would be a boolean field indicating whether the request resulted in an error.
+With this design, the following sample queries could be performed on the datastore:
+
+Get the API with the maximum average response time across all users:
+Copy code
+SELECT a.name, AVG(r.response_time) AS avg_response_time
+FROM apis AS a
+JOIN requests AS r ON a.id = r.api_id
+GROUP BY a.name
+ORDER BY avg_response_time DESC
+LIMIT 1
+Get the API with the maximum average response time for each user:
+Copy code
+SELECT u.name, a.name, AVG(r.response_time) AS avg_response_time
+FROM users AS u
+JOIN requests AS r ON u.id = r.user_id
+JOIN apis AS a ON a.id = r.api_id
+GROUP BY u.name,

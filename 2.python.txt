@@ -1,0 +1,12 @@
+def find_phonetic_combinations(word, file):
+    phonetic_combinations = []
+
+    with open(file, "r") as f:
+        for line in f:
+            words = line.split()
+
+            for w in words:
+                if sounds_like(w, word):
+                    phonetic_combinations.append(w)
+
+    return phonetic_combinations
